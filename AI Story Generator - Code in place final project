@@ -1,0 +1,30 @@
+Project Title: StorySeed – AI-Powered Interactive Story Generator
+
+Overview :-
+A Python program that generates unique, genre-based short stories on demand. Users can:  
+- Choose characters, settings, and genres (adventure, horror, sci-fi, etc.)
+- Opt for AI-generated stories** (via OpenAI API) or **local random tales
+- Save stories to a text file for sharing  
+
+Key Features :-
+1. Dual Generation Modes
+   - **AI Mode**: Uses ChatGPT API for dynamic, creative stories  
+   - **Local Mode**: Fallback with randomized templates (no API needed)  
+
+2. User-Friendly Design :-
+   - Input validation + clear instructions  
+   - Humorous local stories to engage users  
+
+3. Technical Highlights
+   - Modular functions for easy maintenance  
+   - Error handling for API failures  
+   - Randomization for varied outputs  
+
+Example Output (Local Mode) :-
+*"Lila entered the haunted spaceship. The ghosts were real... but all they wanted was tech support for their warp drive."*  
+ 
+Learning Outcomes :-
+- API integration  
+- String manipulation  
+- User input validation  
+- Creative problem-solving  
