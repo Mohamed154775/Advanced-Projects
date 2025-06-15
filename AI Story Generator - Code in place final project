@@ -1,30 +1,94 @@
-Project Title: StorySeed – AI-Powered Interactive Story Generator
+import random
+import openai
+from typing import Optional
 
-Overview :-
-A Python program that generates unique, genre-based short stories on demand. Users can:  
-- Choose characters, settings, and genres (adventure, horror, sci-fi, etc.)
-- Opt for AI-generated stories** (via OpenAI API) or **local random tales
-- Save stories to a text file for sharing  
+# ========================
+# 🎲 MOCK STORY GENERATOR
+# ========================
+def mock_story_generator(character: str, genre: str, setting: str) -> str:
+    """Generates a random unique story without API"""
+    
+    templates = {
+        "adventure": [
+            f"{character} discovered a hidden map in {setting}, leading to a legendary artifact... but the real treasure was the lessons learned.",
+            f"A storm trapped {character} in {setting}. To survive, they teamed up with a talking {random.choice(['fox', 'robot', 'mushroom'])}.",
+            f"{character}'s quest through {setting} revealed a door to another dimension. Behind it: {random.choice(['their future self', 'a library of lost books', 'a pizza party'])}."
+        ],
+        "horror": [
+            f"In {setting}, {character} found a diary with their name on it... written in the future tense.",
+            f"Every night in {setting}, one object in {character}'s bag would vanish. On day 7, it was their {random.choice(['shadow', 'reflection', 'memory'])}.",
+            f"The whispers in {setting} started answering {character}'s questions... with uncomfortable truths."
+        ],
+        "sci-fi": [
+            f"On {setting}, {character} hacked an alien mainframe only to find it running {random.choice(['Windows 95', 'a simulation of Earth', 'cat videos'])}.",
+            f"{character}'s spaceship crashed on {setting}. The natives worshipped it as {random.choice(['a god', 'a vending machine', 'their lost queen'])}.",
+            f"In 3023, {character} smuggled the last {random.choice(['tree', 'sneeze', 'high-five'])} out of {setting}."
+        ],
+        "fantasy": [
+            f"{character} cast a spell in {setting} that accidentally turned the king into a {random.choice(['potato', 'llama', 'fountain pen'])}.",
+            f"The dragon of {setting} demanded a sacrifice. {character} offered it {random.choice(['a riddle', 'a tax form', 'a TikTok dance'])} instead."
+        ]
+    }
+    
+    genre = genre.lower()
+    if genre not in templates:
+        genre = random.choice(list(templates.keys()))
+    
+    return random.choice(templates[genre])
 
-Key Features :-
-1. Dual Generation Modes
-   - **AI Mode**: Uses ChatGPT API for dynamic, creative stories  
-   - **Local Mode**: Fallback with randomized templates (no API needed)  
+# ========================
+# 🤖 AI STORY GENERATOR
+# ========================
+def ai_story_generator(api_key: str, character: str, genre: str, setting: str) -> Optional[str]:
+    """Generates a story using OpenAI API"""
+    try:
+        openai.api_key = api_key
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{
+                "role": "user",
+                "content": f"Write a short {genre} story about {character} in {setting}. Include a plot twist. Keep it under 100 words."
+            }],
+            temperature=1.5  # Higher = more creative/random
+        )
+        return response.choices[0].message['content']
+    except:
+        return None
 
-2. User-Friendly Design :-
-   - Input validation + clear instructions  
-   - Humorous local stories to engage users  
+# ========================
+# 🎨 MAIN PROGRAM
+# ========================
+def main():
+    print("✨ Story Generator 3000 ✨\n")
+    
+    # Get user input
+    character = input("Main character's name: ").strip() or "Hero"
+    genre = input("Genre (adventure/horror/sci-fi/fantasy): ").strip().lower() or random.choice(["adventure", "horror"])
+    setting = input("Setting: ").strip() or "a mysterious place"
+    
+    # Try AI generation if API key provided
+    api_key = input("\nOptional: Enter OpenAI API key (press Enter for local mode): ").strip()
+    story = None
+    
+    if api_key:
+        story = ai_story_generator(api_key, character, genre, setting)
+        if story:
+            print("\n[AI-Generated Story]")
+        else:
+            print("\n⚠️ API failed. Using local generator instead.")
+    
+    if not story:
+        story = mock_story_generator(character, genre, setting)
+        print("\n[Locally-Generated Story]")
+    
+    # Display and save
+    print("\n" + "=" * 40)
+    print(story)
+    print("=" * 40)
+    
+    with open("generated_story.txt", "w") as f:
+        f.write(story)
+    print("\n💾 Story saved to 'generated_story.txt'")
 
-3. Technical Highlights
-   - Modular functions for easy maintenance  
-   - Error handling for API failures  
-   - Randomization for varied outputs  
-
-Example Output (Local Mode) :-
-*"Lila entered the haunted spaceship. The ghosts were real... but all they wanted was tech support for their warp drive."*  
- 
-Learning Outcomes :-
-- API integration  
-- String manipulation  
-- User input validation  
-- Creative problem-solving  
+if __name__ == "__main__":
+    main()
