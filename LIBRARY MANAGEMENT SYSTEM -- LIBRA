@@ -3,7 +3,7 @@ from tkinter import *
 from PIL import *
 from PIL import Image , ImageTk
 
-# ------------ Create Log in Page ------------
+# ------------ Create Log in Page -------------
 
 Log_in = Tk()
 Log_in.title('LIBRARY MANAGEMENT SYSTEM')
